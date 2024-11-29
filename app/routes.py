@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.services import list_employees, create_employee,update_employee,remove_employee
+from app.services import list_employees, create_employee,update_employee,remove_employee,fetch_employee_by_id
 from app.exceptions import EmployeeNotFoundError
 
 employees = Blueprint('employees', __name__)
@@ -14,6 +14,11 @@ def post_employee():
   data = request.get_json()
   new_employee = create_employee(data)
   return jsonify(new_employee),201
+
+@employees.route('/employees/<id>', methods=['GET'])
+def get_employee_by_id(id):
+  employee = fetch_employee_by_id(id)
+  return jsonify(employee), 200
 
 @employees.route('/employees/<id>', methods=['PUT'])
 def put_employee(id):

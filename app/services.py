@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from app.models import fake_db
+from app.memory_database import fake_db
 from app.exceptions import EmployeeNotFoundError
 
 
