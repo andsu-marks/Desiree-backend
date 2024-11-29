@@ -12,7 +12,7 @@ fake_db = [
   {
     "id": "9d894608-ef65-4cd4-bf68-8e4ae861ada5", 
     "name": "Felipe Marques", 
-    "email": "anderson@exemplo.com", 
+    "email": "felipe@exemplo.com", 
     "role": "employee", 
     "password": "1234",
     "created_at": "2024-11-25",
