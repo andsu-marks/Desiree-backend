@@ -1,2 +1,2 @@
-class EmployeeNotFoundError(Exception):
+class EmployeeError(Exception):
     pass
