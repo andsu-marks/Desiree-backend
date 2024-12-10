@@ -1,2 +1,0 @@
-class EmployeeError(Exception):
-    pass

@@ -1,9 +1,10 @@
 from flask import current_app
 from sqlalchemy.exc import IntegrityError
 from marshmallow import ValidationError
-from app.exceptions import EmployeeError
+from app.exceptions.employee_error import EmployeeError
 from app.models.model import Employee
 from app.schemas.employee import employees_schema, employee_schema
+from flask import jsonify
 
 
 def list_employees():
@@ -24,7 +25,7 @@ def create_employee(data):
   except Exception as e:
     raise EmployeeError(f'Error: {str(e)}')
   
-  email_exists = session.query(Employee).filter_by(email=new_employee.email)
+  email_exists = session.query(Employee).filter_by(email=new_employee.email).first()
   if email_exists:
     raise EmployeeError('This e-mail is already in use', 409)
 
@@ -54,6 +55,12 @@ def update_employee(data, id):
   session = current_app.session
 
   try:
+    if 'email' in data and data['email'] != employee.email:
+      email_exists = session.query(Employee).filter_by(email=data['email']).first()
+
+      if email_exists:
+        raise EmployeeError('This e-mail is already in use', 409)
+      
     validated_data = employee_schema.load(data, session=session)
     for field in validated_data:
       setattr(employee, field, data[field])

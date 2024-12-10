@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from app.services import list_employees, create_employee, update_employee, remove_employee, fetch_employee_by_id
-from app.exceptions import EmployeeError
+from app.exceptions.employee_error import EmployeeError
 
 employees = Blueprint('employees', __name__)
 

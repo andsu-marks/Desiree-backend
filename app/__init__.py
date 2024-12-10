@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import os
 from app.routes.routes import employees
+from app.exceptions.handler_error import register_error_handlers
 
 load_dotenv()
 
@@ -18,6 +19,7 @@ def create_app():
   Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
   app.session = Session()
 
+  register_error_handlers(app)
   app.register_blueprint(employees)
   
   CORS(app)
