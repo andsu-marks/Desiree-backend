@@ -10,6 +10,8 @@ sqlalchemy = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
 marshmallow-sqlalchemy = "*"
+marshmallow = "*"
+marshmallow-enum = "*"
 
 [dev-packages]
 

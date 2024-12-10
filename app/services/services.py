@@ -1,5 +1,6 @@
 from flask import current_app
 from sqlalchemy.exc import IntegrityError
+from marshmallow import ValidationError
 from app.exceptions import EmployeeError
 from app.models.model import Employee
 from app.schemas.employee import employees_schema, employee_schema
@@ -13,26 +14,27 @@ def list_employees():
 
 
 def create_employee(data):
-  required_fields = ['name', 'email', 'role', 'password']
-
-  if not all(field in data for field in required_fields):
-    raise EmployeeError("Missing required fields")
-  
-  new_employee = Employee(
-    name=data['name'],
-    email=data['email'],
-    role=data['role'],
-    password=data['password']
-  )
-
   session = current_app.session  
+
+  try:
+    validated_data = employee_schema.load(data, session=session)
+    new_employee = Employee(**validated_data)
+  except ValidationError as err:
+    raise EmployeeError(f'Validation error: {err.messages}')
+  except Exception as e:
+    raise EmployeeError(f'Error: {str(e)}')
+  
+  email_exists = session.query(Employee).filter_by(email=new_employee.email)
+  if email_exists:
+    raise EmployeeError('This e-mail is already in use', 409)
+
   session.add(new_employee)
   
   try:
     session.commit()
   except IntegrityError:
     session.rollback()
-    raise Exception("Error while creating the employee. Possibly a duplicate entry.")
+    raise EmployeeError("Error while creating the employee. Possibly a duplicate entry.")
   
   return employee_schema.dump(new_employee)
 
@@ -49,29 +51,27 @@ def fetch_employee_by_id(id, serialize=True):
 
 def update_employee(data, id):
   employee = fetch_employee_by_id(id, serialize=False)
-  if not employee:
-    raise EmployeeError("Employee not found", 400)
-  
-  allowed_fields = ["name", "email", "role", "password"]
+  session = current_app.session
 
-  for field in allowed_fields:
-    if field in data:
+  try:
+    validated_data = employee_schema.load(data, session=session)
+    for field in validated_data:
       setattr(employee, field, data[field])
 
-    
-  session = current_app.session
-  session.add(employee)
-  session.commit()
+    session.add(employee)
+    session.commit()
+  except ValidationError as err:
+    session.rollback()
+    raise EmployeeError(f'Validation error: {err.messages}')
+  except Exception as e:
+    session.rollback()
+    raise EmployeeError(f'Error: {str(e)}')
 
   return employee_schema.dump(employee)
 
 
 def remove_employee(id):
   employee = fetch_employee_by_id(id, serialize=False)
-
-  if not employee:
-    raise EmployeeError("Employee not found", 400)
-  
   session = current_app.session
   session.delete(employee)
   session.commit()

@@ -13,7 +13,7 @@ def create_employee():
         name="Anderson", 
         email="anderson@email.com", 
         password="1234", 
-        role="ADMIN"
+        isAdmin=True
     )
 
     session.add(new_employee)
