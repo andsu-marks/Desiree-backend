@@ -2,9 +2,8 @@ from flask import current_app
 from sqlalchemy.exc import IntegrityError
 from marshmallow import ValidationError
 from app.exceptions.employee_error import EmployeeError
-from app.models.model import Employee
-from app.schemas.employee import employees_schema, employee_schema
-from flask import jsonify
+from app.models.employee import Employee
+from app.schemas.employee_schema import employees_schema, employee_schema
 
 
 def list_employees():

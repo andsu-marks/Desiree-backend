@@ -1,7 +1,6 @@
 from app import create_app
 from sqlalchemy.orm import Session
-from app.models.model import Base
-from app.models.model import Employee  
+from app.models.employee import Base, Employee  
 
 app = create_app()
 

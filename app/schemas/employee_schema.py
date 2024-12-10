@@ -1,7 +1,7 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from marshmallow import fields, pre_load, validate, ValidationError
 from werkzeug.security import generate_password_hash
-from app.models.model import Employee
+from app.models.employee import Employee
 
 class EmployeeSchema(SQLAlchemyAutoSchema):
 

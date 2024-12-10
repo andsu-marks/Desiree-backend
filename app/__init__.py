@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import os
-from app.routes.routes import employees
+from app.routes.employee_routes import employees
 from app.exceptions.handler_error import register_error_handlers
 
 load_dotenv()
