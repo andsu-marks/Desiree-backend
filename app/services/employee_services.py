@@ -1,6 +1,7 @@
 from flask import current_app
 from sqlalchemy.exc import IntegrityError
 from marshmallow import ValidationError
+from datetime import datetime
 from app.exceptions.employee_error import EmployeeError
 from app.models.employee import Employee
 from app.schemas.employee_schema import employees_schema, employee_schema
@@ -8,7 +9,7 @@ from app.schemas.employee_schema import employees_schema, employee_schema
 
 def list_employees():
   session = current_app.session
-  employees = session.query(Employee).all()
+  employees = session.query(Employee).filter_by(deleted_at=None).all()
   
   return employees_schema.dump(employees)
 
@@ -77,7 +78,9 @@ def update_employee(data, id):
 
 
 def remove_employee(id):
-  employee = fetch_employee_by_id(id, serialize=False)
   session = current_app.session
-  session.delete(employee)
+
+  employee = fetch_employee_by_id(id, serialize=False)
+  employee.deleted_at = datetime.now()
+
   session.commit()
