@@ -12,8 +12,10 @@ python-dotenv = "*"
 marshmallow-sqlalchemy = "*"
 marshmallow = "*"
 marshmallow-enum = "*"
+flask-jwt-extended = "*"
 
 [dev-packages]
+pytest = "*"
 
 [requires]
 python_version = "3.10"

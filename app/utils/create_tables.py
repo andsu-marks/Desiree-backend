@@ -10,8 +10,8 @@ def create_employee():
 
     new_employee = Employee(
         name="Anderson", 
-        email="anderson@email.com", 
-        password="1234", 
+        email="anderson@gmail.com", 
+        password="12345678", 
         isAdmin=True
     )
 

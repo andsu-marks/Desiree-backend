@@ -7,7 +7,7 @@ class EmployeeSchema(SQLAlchemyAutoSchema):
 
   id = fields.UUID(dump_only=True) 
   name = fields.String(required=True, validate=validate.Length(min=2, error="Name needs at least 2 characters"))
-  email = fields.Email(required=True, )
+  email = fields.Email(required=True)
   isAdmin = fields.Boolean(required=True)
   password = fields.String(load_only=True, required=True, validate=validate.Length(min=8, error="Password needs at least 8 characters"))
   created_at = fields.DateTime(dump_only=True)  
